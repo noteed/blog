@@ -198,3 +198,44 @@ dependency of your deployment), you can specify it by itself. Here we add
       pkgs.wget
     ];
 ```
+
+
+## Imports
+
+Instead of having everything in the same Nix expression (beside the static
+site), it is possible to use the `imports` feature of NixOS.
+
+We remove the `extraUsers`,`activationScripts` and `systemCronJobs` parts and
+move them to a new file, `toto.nix`:
+
+```
+{ config, pkgs, ... }: {
+  users.extraUsers.toto = {
+    uid = 1000;
+    isNormalUser = true;
+    home = "/home/toto";
+    description = "The Toto User";
+    extraGroups = [ "wheel" ];
+    openssh.authorizedKeys.keys = [ "ssh-rsa xxxx toto@somewhere" ];
+  };
+
+  system.activationScripts.toto =
+    ''
+      echo Creating toto directories...
+      mkdir -m 0755 -p /home/toto/toto
+      chown toto:users /home/toto/toto
+    '';
+
+    services.cron.systemCronJobs = [
+        "35 * * * * toto cd /home/toto/toto && echo Hello > date.log"
+    ];
+}
+```
+
+In their place, we simply import the new file:
+
+```
+    imports = [ ./toto.nix ];
+```
+
+NixOS will merge similar records to create the deployment.
