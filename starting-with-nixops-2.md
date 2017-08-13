@@ -1,6 +1,6 @@
 ---
 title: Starting with NixOps (and thus Nix and NixOS), part 2
-published: 2017-08-11
+published: 2017-08-14
 ---
 
 # Starting with NixOps (and thus Nix and NixOS), part 2
@@ -14,6 +14,8 @@ something you really want to do. Instead we will update the Nix expression to
 refine the setup of our droplet and let NixOps do the rest. (SSHing into a
 machine should only be used to investigate problems, not to change the state of
 a machine.)
+
+In this post, I'll show how to add a handful of things to our deployment.
 
 
 ## .envrc
@@ -58,3 +60,73 @@ $ curl http://185.14.186.74
 
 As a reminder, in addition to retrieving the IP address from the Digital Ocean
 web interface, you can also use `nixops info`.
+
+
+## Static site
+
+In this section we prepare a simple one-file static site. We turn it into a Nix
+expression that we use in our deployment.
+
+We create a directory (this could be a complete Git repository) to contain the
+site andd associated scripts (e.g. a static site generator that would generate
+a `_site` directory):
+
+```
+$ mkdir -p static_site/_site
+$ echo "Hello." > static_site/_site/index.html
+```
+
+We add a `default.nix` file to build the site:
+
+```
+with import <nixpkgs> {};
+{
+  static_site = stdenv.mkDerivation {
+    name = "static_site";
+    src  = ./.;
+    installPhase = ''
+      mkdir -p "$out/"
+      cp -a ./_site "$out/"
+    '';
+  };
+}
+```
+
+The `default.nix` file uses the standard Nix machinery, nothing specific to
+NixOS. All it does is copying the `_site` directory. In a more realistic setup,
+it would probably first build it.
+
+Now to use that package in our deployment, we:
+
+- import it
+- use it in the Nginx configuration
+
+At the top of our `do.nix` file we add
+```
+let
+  static_site = (import ./static_site).static_site;
+in
+```
+
+We modify the Nginx part with:
+
+```
+    services.nginx = {
+      enable = true;
+      virtualHosts = {
+        "hypered.io" = {
+          root = "${static_site}/_site";
+        };
+      };
+    };
+```
+
+After deploying again:
+
+```
+$ curl http://185.14.186.74
+Hello.
+```
+
+
+## Users
