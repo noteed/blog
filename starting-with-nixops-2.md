@@ -190,7 +190,7 @@ directory:
 ## Packages
 
 If you need a pakcage that is not automatically installed (i.e. it is not yet a
-dependency of your deployment), you call specify it by itself. Here we add
+dependency of your deployment), you can specify it by itself. Here we add
 `wget`:
 
 ```
