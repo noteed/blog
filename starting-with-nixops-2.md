@@ -114,7 +114,7 @@ We modify the Nginx part with:
     services.nginx = {
       enable = true;
       virtualHosts = {
-        "hypered.io" = {
+        "example.com" = {
           root = "${static_site}/_site";
         };
       };
@@ -130,3 +130,71 @@ Hello.
 
 
 ## Users
+
+Adding users look like this:
+
+```
+    users.mutableUsers = false;
+    users.extraUsers.toto = {
+      uid = 1000;
+      isNormalUser = true;
+      home = "/home/toto";
+      description = "The Toto User";
+      extraGroups = [ "wheel" ];
+      openssh.authorizedKeys.keys = [ "ssh-rsa xxxx toto@somewhere" ];
+    };
+```
+
+Stating `mutableUsers = false` basically means that existing users and
+passwords are configured by the deployment instead of by login into the machine
+then changing things.
+
+Now that we hase a user, we can provision some data directory:
+
+```
+    system.activationScripts.toto =
+      ''
+        echo Creating toto directories...
+        mkdir -m 0755 -p /home/toto/toto
+        chown toto:users /home/toto/toto
+      '';
+```
+
+We can confirm all is well:
+
+```
+$ nixops ssh -d do-rem machine-1
+[root@machine-1:~]# su toto
+[toto@machine-1:/root]$ cd
+[toto@machine-1:~]$ ls
+toto
+```
+
+
+## Cron
+
+
+We the above user and directory in place, we add a cron job to fill that
+directory:
+
+```
+    services.cron = {
+      enable = true;
+      systemCronJobs = [
+        "0 5 * * * toto cd /home/toto/toto && date > date.log"
+      ];
+    };
+```
+
+
+## Packages
+
+If you need a pakcage that is not automatically installed (i.e. it is not yet a
+dependency of your deployment), you call specify it by itself. Here we add
+`wget`:
+
+```
+    environment.systemPackages = [
+      pkgs.wget
+    ];
+```
