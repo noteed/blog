@@ -132,3 +132,8 @@ You can destroy the droplet with the following command:
 $ DIGITAL_OCEAN_AUTH_TOKEN=xxxx nixops destroy -d do
 machine-1> destroying droplet 57418645
 ```
+
+
+## Next
+
+[Part 2 is here.](starting-with-nixops-2.md)
