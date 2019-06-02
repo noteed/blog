@@ -68,7 +68,7 @@ In this section we prepare a simple one-file static site. We turn it into a Nix
 expression that we use in our deployment.
 
 We create a directory (this could be a complete Git repository) to contain the
-site andd associated scripts (e.g. a static site generator that would generate
+site and associated scripts (e.g. a static site generator that would generate
 a `_site` directory):
 
 ```
