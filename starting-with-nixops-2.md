@@ -3,7 +3,6 @@ title: Starting with NixOps (and thus Nix and NixOS), part 2
 published: 2017-08-15
 ---
 
-# Starting with NixOps (and thus Nix and NixOS), part 2
 
 In [part 1](starting-with-nixops-1.md), I showed how to write a very basic Nix
 expression to describe a machine to be deployed on Digital Ocean using NixOps,
@@ -18,7 +17,7 @@ a machine.)
 In this post, I'll show how to add a handful of things to our deployment.
 
 
-## .envrc
+# .envrc
 
 Having to specify the `DIGITAL_OCEAN_AUTH_TOKEN` environment variable is
 tiresome (and possibly insecure since it is visible is various places, e.g. the
@@ -33,7 +32,7 @@ In the reminder of the blog post, I will thus no longer prefix my commands with
 the Digital Ocean token.
 
 
-## Nginx
+# Nginx
 
 As a first modification to our deployment, let's add Nginx. Since Nginx is
 already part of NixOS, we don't have much to do:
@@ -62,7 +61,7 @@ As a reminder, in addition to retrieving the IP address from the Digital Ocean
 web interface, you can also use `nixops info`.
 
 
-## Static site
+# Static site
 
 In this section we prepare a simple one-file static site. We turn it into a Nix
 expression that we use in our deployment.
@@ -129,7 +128,7 @@ Hello.
 ```
 
 
-## Users
+# Users
 
 Adding users look like this:
 
@@ -171,7 +170,7 @@ toto
 ```
 
 
-## Cron
+# Cron
 
 
 We the above user and directory in place, we add a cron job to fill that
@@ -187,7 +186,7 @@ directory:
 ```
 
 
-## Packages
+# Packages
 
 If you need a pakcage that is not automatically installed (i.e. it is not yet a
 dependency of your deployment), you can specify it by itself. Here we add
@@ -200,7 +199,7 @@ dependency of your deployment), you can specify it by itself. Here we add
 ```
 
 
-## Imports
+# Imports
 
 Instead of having everything in the same Nix expression (beside the static
 site), it is possible to use the `imports` feature of NixOS.

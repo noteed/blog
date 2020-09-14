@@ -3,7 +3,6 @@ title: Exposing a local server through HAProxy using a reverse SSH tunnel
 published: 2017-08-03
 ---
 
-# Exposing a local server through HAProxy using a reverse SSH tunnel
 
 Probably the most frequent way to write a server is to
 run it on a laptop and access it directly, using `localhost` or
@@ -50,7 +49,7 @@ world and defeat the use of client certificates when routing the subdomain to
 your laptop.)
 
 
-## HAProxy configuration and `ssh` command:
+# HAProxy configuration and `ssh` command:
 
 Using a UNIX domain socket is possible in HAProxy: simply give the path instead of an `addr:port` pair:
 
@@ -65,12 +64,12 @@ On the laptop, running the tunnel looks like:
 ```
 
 
-## Troubleshooting
+# Troubleshooting
 
 In the next sections, I show some possible problems you might encounter.
 
 
-### Using cURL with UNIX domain sockets
+## Using cURL with UNIX domain sockets
 
 On the HAProxy machine, you can check if your server is indeed accessible
 through the forwaded UNIX domain socket with a command like:
@@ -79,7 +78,7 @@ through the forwaded UNIX domain socket with a command like:
 > curl --unix-socket /forwarder/alice.sock http://alice
 ```
 
-### Deleting an existing socket when a client tries to establish a reverse tunnel
+## Deleting an existing socket when a client tries to establish a reverse tunnel
 
 You can read an error looking like the following:
 
@@ -92,7 +91,7 @@ delete it, you can configure you SSH server to reuse existing paths: in
 `sshd_config`, set `StreamLocalBindUnlink yes`.
 
 
-### Allow the forwarded port to listen to a public address.
+## Allow the forwarded port to listen to a public address.
 
 If you use a regular port instead of a UNIX domain socket, you should know that
 by default the SSH server will make forwarded ports listen only on the loopback
@@ -104,7 +103,7 @@ Be carefull if your `address:port` combination is accessible from the outside
 world.
 
 
-### HAProxy access right
+## HAProxy access right
 
 Make sure the HAProxy process can read the socket (i.e. can read the file and
 traverse the necessary directories).

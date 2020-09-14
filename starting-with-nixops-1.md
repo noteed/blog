@@ -3,7 +3,6 @@ title: Starting with NixOps (and thus Nix and NixOS), part 1
 published: 2017-08-04
 ---
 
-# Starting with NixOps (and thus Nix and NixOS), part 1
 
 While learning the Nix ecosystem and trying to use it, I found it a bit more
 harder than I thought to achieve what I wanted. In this post and the next one,
@@ -13,7 +12,7 @@ people that would like to follow the same path.
 The prerequesite to follow along this post is to install Nix and NixOps.
 
 
-## Basics
+# Basics
 
 The basics of Nix are actually very well documented elsewhere; in particular:
 
@@ -22,7 +21,7 @@ The basics of Nix are actually very well documented elsewhere; in particular:
 - [The Nix pills series](http://lethalman.blogspot.be/2014/07/nix-pill-1-why-you-should-give-it-try.html)
 
 
-## Running example
+# Running example
 
 As as a starting point, here I give a `do.nix` file suitable for the `nixops`
 executable. I will use it in the rest of the post as a running example:
@@ -117,14 +116,14 @@ Nix expressions: /home/thu/projects/web/nixops/do.nix
 ```
 
 
-## Deploying changes
+# Deploying changes
 
 When you want to update the machine, following changes to the Nix expression
 describing it, the same `deploy` command is used again. (You can already do it
 again with no changes and it should complete much more quickly.)
 
 
-## Destroying the machine
+# Destroying the machine
 
 You can destroy the droplet with the following command:
 
@@ -134,6 +133,6 @@ machine-1> destroying droplet 57418645
 ```
 
 
-## Next
+# Next
 
 [Part 2 is here.](starting-with-nixops-2.md)
